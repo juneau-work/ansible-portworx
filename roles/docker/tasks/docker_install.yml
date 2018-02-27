@@ -1,8 +1,3 @@
-- include_tasks: docker_online_repo.yml
-    when: not DOCKER_OFFLINE_REPO != ''
-- include_tasks: docker_offline_repo.yml
-    when: DOCKER_OFFLINE_REPO != ''
-
 - name: yum.conf obsoletes=0
   ini_file:
     path: /etc/yum.conf
@@ -24,31 +19,6 @@
     section: main
     option: obsoletes
     value: 1
-
-- name: thinpool
-  include_tasks: thinpool.yml
-  when: THINPOOL_DISKS != ''
-
-- name: /dev/mapper/{{ VG_NAME }}-{{ THINPOOL_NAME }} exists ?
-  stat: 
-    path: /dev/mapper/{{ VG_NAME }}-{{ THINPOOL_NAME }}
-  register: thinpool_exists
-
-- name: create docker configuration directory(/etc/docker)
-  file:
-    path: /etc/docker
-    state: directory
-    owner: root
-    group: root
-    mode: 0700
-
-- name: docker_config_thinpool
-  include_tasks: docker_config_thinpool.yml
-  when: thinpool_exists.stat.exists
-
-- name: docker_config_no_thinpool
-  include_tasks: docker_config_no_thinpool.yml
-  when: not thinpool_exists.stat.exists
 
 - name: tune docker.service
   ini_file:

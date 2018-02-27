@@ -8,14 +8,6 @@
     - docker
   ignore_errors: true
 
-- name: remove repos
-  file:
-    path: /etc/yum.repos.d/{{ item }}
-    state: absent
-  with_items:
-    - docker-ce.repo
-    - docker_offline.repo
-
 - name: uninstall docker-ce-{{ docker_version }}
   yum: 
     name: "{{ item }}"
@@ -42,20 +34,3 @@
     - /etc/docker
     - /var/lib/dockershim
     - /var/lib/docker
-
-- name: thinpool
-  lvol:
-    vg: "{{ VG_NAME }}"
-    lv: "{{ THINPOOL_NAME }}"
-    state: absent
-    force: "{{ force_remove | default('no') }}"
-  ignore_errors: true
-  tags: thinpool_remove
-
-- name: vg
-  lvg:
-    vg: "{{ VG_NAME }}"
-    state: absent
-    force: "{{ force_remove | default('no') }}"
-  ignore_errors: true
-  tags: vg_remove
