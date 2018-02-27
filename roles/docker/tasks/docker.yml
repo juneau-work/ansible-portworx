@@ -1,0 +1,67 @@
+- name: yum.conf obsoletes=0
+  ini_file:
+    path: /etc/yum.conf
+    section: main
+    option: obsoletes
+    value: 0
+
+- name: install kubelet-{{ kubelet_version }} & docker-ce-{{ docker_version }}
+  yum: 
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - kubelet-{{ kubelet_version }}
+    - docker-ce-{{ docker_version }}
+
+- name: yum.conf obsoletes=1
+  ini_file:
+    path: /etc/yum.conf
+    section: main
+    option: obsoletes
+    value: 1
+
+- name: thinpool
+  include_tasks: thinpool.yml
+  when: THINPOOL_DISKS != ''
+
+- name: /dev/mapper/{{ VG_NAME }}-{{ THINPOOL_NAME }} exists ?
+  stat: 
+    path: /dev/mapper/{{ VG_NAME }}-{{ THINPOOL_NAME }}
+  register: thinpool_exists
+
+- name: create docker configuration directory(/etc/docker)
+  file:
+    path: /etc/docker
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
+- name: docker_config_thinpool
+  include_tasks: docker_config_thinpool.yml
+  when: thinpool_exists.stat.exists
+
+- name: docker_config_no_thinpool
+  include_tasks: docker_config_no_thinpool.yml
+  when: not thinpool_exists.stat.exists
+
+- name: tune docker.service
+  ini_file:
+    path: /lib/systemd/system/docker.service
+    section: Service
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { option: Restart, value: on-failure }
+    - { option: RestartSec, value: 3 }
+
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: start docker
+  service: 
+    name: docker
+    state: started 
+    enabled: yes

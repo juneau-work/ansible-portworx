@@ -1,0 +1,3 @@
+---
+- import_tasks: dce_installer_{{ install_or_uninstall }}.yml
+  tags: dce_installer

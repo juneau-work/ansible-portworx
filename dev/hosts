@@ -1,0 +1,10 @@
+[all:vars]
+ansible_user={{ vault_ansible_user }}
+
+[seed]
+
+[manager]
+192.168.130.12
+192.168.130.13
+
+[worker]

@@ -1,0 +1,79 @@
+---
+- name: add etcd group
+  group:
+    name: etcd
+    state: present
+
+- name: add etcd user
+  user:
+    name: etcd
+    shell: /sbin/nologin
+    groups: etcd
+    append: yes
+
+- name: download etcd MD5
+  get_url:
+    url: "{{ etcd_bin_tar_url }}/etcd-{{ etcd_version }}-linux-amd64.tar.gz.MD5"
+    dest: /tmp
+
+- name: check md5
+  shell: "[[ \"$(md5sum /tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz|awk '{print $1}')\" == \"$(cat /tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz.MD5)\" ]]"
+  register: md5_result
+  ignore_errors: true
+
+- debug:
+    msg: "{{ md5_result }}"
+
+- name: download etcd binary
+  get_url:
+    url: "{{ etcd_bin_tar_url }}/etcd-{{ etcd_version }}-linux-amd64.tar.gz"
+    dest: /tmp
+  when: md5_result.rc != 0
+
+- name: unarchive etcd tar
+  unarchive:
+    remote_src: yes
+    src: /tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz
+    dest: /tmp
+  when: md5_result.rc != 0
+
+- name: move etcd,etcdctl to PATH
+  copy:
+    remote_src: yes
+    src: /tmp/etcd-{{ etcd_version }}-linux-amd64/{{ item }}
+    dest: /usr/bin
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - etcd
+    - etcdctl
+
+- name: create etcd data directory
+  file:
+    path: /opt/etcd
+    state: directory
+    owner: etcd
+    group: etcd
+    mode: 0755
+
+- name: create /lib/systemd/system/etcd.service
+  copy:
+    src: etcd.service
+    dest: /lib/systemd/system/etcd.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: /etc/etcd.conf
+  template: 
+    src: etcd.conf.j2 
+    dest: /etc/etcd.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart etcd

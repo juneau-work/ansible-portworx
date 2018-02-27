@@ -1,0 +1,8 @@
+name: "{{ inventory_hostname_short }}"
+data-dir: "/opt/etcd"
+initial-advertise-peer-urls: "http://{{ ansible_host }}:2380"
+listen-peer-urls: "http://0.0.0.0:2380"
+listen-client-urls: "http://0.0.0.0:2379"
+advertise-client-urls: "http://{{ ansible_host }}:2379"
+initial-cluster: "{% for item in groups['etcd-node'] %}{{ item }}=http://{{ hostvars[item]['ansible_host'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}"
+initial-cluster-token: "etcd-cluster"
