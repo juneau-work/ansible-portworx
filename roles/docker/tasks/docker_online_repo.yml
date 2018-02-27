@@ -1,0 +1,27 @@
+- name: docker-ce yum repo
+  yum_repository:
+    name: docker-ce-stable
+    description: Docker CE Stable - $basearch
+    file: docker-ce
+    baseurl: https://download.daocloud.io/docker/linux/centos/7/$basearch/stable
+    gpgcheck: yes
+    gpgkey: https://download.daocloud.io/docker/linux/centos/gpg
+
+- name: docker-ce extra yum repo
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    file: docker-ce
+    baseurl: "{{ item.baseurl }}"
+    gpgcheck: yes
+    gpgkey: https://download.daocloud.io/docker/linux/centos/gpg
+    enabled: no
+  with_items:
+    - { name: 'docker-ce-stable-debuginfo', description: 'Docker CE Stable - Debuginfo $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/debug-$basearch/stable' }
+    - { name: 'docker-ce-stable-source', description: 'Docker CE Stable - Sources', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/source/stable' }
+    - { name: 'docker-ce-edge', description: 'Docker CE Edge - $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/$basearch/edge' }
+    - { name: 'docker-ce-edge-debuginfo', description: 'Docker CE Edge - Debuginfo $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/debug-$basearch/edge' }
+    - { name: 'docker-ce-edge-source', description: 'Docker CE Edge - Sources', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/source/edge' }
+    - { name: 'docker-ce-test', description: 'Docker CE Test - $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/$basearch/test' }
+    - { name: 'docker-ce-test-debuginfo', description: 'Docker CE Test - Debuginfo $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/debug-$basearch/test' }
+    - { name: 'docker-ce-test-source', description: 'Docker CE Test - Sources', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/source/test' }

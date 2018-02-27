@@ -1,3 +1,8 @@
+- include_tasks: docker_online_repo.yml
+    when: not DOCKER_OFFLINE_REPO != ''
+- include_tasks: docker_offline_repo.yml
+    when: DOCKER_OFFLINE_REPO != ''
+
 - name: yum.conf obsoletes=0
   ini_file:
     path: /etc/yum.conf
@@ -5,13 +10,12 @@
     option: obsoletes
     value: 0
 
-- name: install kubelet-{{ kubelet_version }} & docker-ce-{{ docker_version }}
+- name: install docker-ce-{{ docker_version }}
   yum: 
     name: "{{ item }}"
     state: present
     update_cache: yes
   with_items:
-    - kubelet-{{ kubelet_version }}
     - docker-ce-{{ docker_version }}
 
 - name: yum.conf obsoletes=1

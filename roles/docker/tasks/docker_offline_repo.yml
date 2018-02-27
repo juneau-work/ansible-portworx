@@ -1,0 +1,7 @@
+---
+- name: docker offline repo
+  yum_repository:
+    name: docker_offline
+    description: docker offline repo
+    baseurl: "{{ docker_offline_repo }}"
+    gpgcheck: no

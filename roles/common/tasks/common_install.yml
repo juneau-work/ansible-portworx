@@ -1,0 +1,9 @@
+---
+- include_tasks: timezone.yml
+- include_tasks: selinux.yml
+- include_tasks: firewalld.yml
+- include_tasks: hostname.yml
+- include_tasks: hosts.yml
+  tags: hosts
+- include_tasks: ntp.yml
+  tags: ntp

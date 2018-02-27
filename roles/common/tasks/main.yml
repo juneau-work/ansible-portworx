@@ -1,2 +1,3 @@
 ---
-# tasks file for common
+- import_tasks: common_{{ install_or_uninstall }}.yml
+  tags: common
