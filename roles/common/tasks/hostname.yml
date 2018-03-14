@@ -1,4 +1,4 @@
 ---
 - name: set hostname
   hostname: 
-    name: "dce-{{ inventory_hostname.split('.')[2:] | join('-') }}"
+    name: "{{ hostname_prefix }}-{{ inventory_hostname.split('.')[2:] | join('-') }}"

@@ -23,9 +23,9 @@ logdir /var/log/chrony
 #log measurements statistics tracking
 port 123
 server {{ ntp_server }} iburst
-#server 127.0.0.1 port 10123 iburst
-#server localhost port 10123 iburst
-#server ::1 port 10123  iburst
+server 127.0.0.1 port 10123 iburst
+server localhost port 10123 iburst
+server ::1 port 10123  iburst
 bindcmdaddress 0.0.0.0
 allow 0.0.0.0/0
 allow ::/0

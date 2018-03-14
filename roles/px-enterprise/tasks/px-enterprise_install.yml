@@ -1,0 +1,52 @@
+---
+- name: /opt/pwx/bin/px-runc exists ?
+  stat: 
+    path: /opt/pwx/bin/px-runc
+  register: runc_exists
+
+- name: sync px-runc
+  shell: > 
+         docker run 
+         --entrypoint /runc-entry-point.sh
+         --rm 
+         --privileged=true
+         -v /opt/pwx:/opt/pwx
+         -v /etc/pwx:/etc/pwx
+         {{ offline_hub_prefix }}/px-enterprise:latest
+  when: not runc_exists.stat.exists
+  
+- name: /etc/systemd/system/portworx.service exists ?
+  stat: 
+    path: /etc/systemd/system/portworx.service
+  register: portworx_service_exists
+
+- name: generate portworx.service
+  shell: > 
+         /opt/pwx/bin/px-runc install
+         -c {{ portworx_cluster_id }}
+         -k {% for item in groups['etcd'] %}{{ hostname_prefix }}-{{ hostvars[item]['inventory_hostname'].split('.')[2:] | join('-') }}=http://{{ hostvars[item]['inventory_hostname'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}
+         -m {{ portworx_manage_interface }}
+         -d {{ portworx_data_interface }}
+         -s {{ portworx_disks }}
+         -secret_type kvdb
+         -x kubernetes
+  when: not portworx_service_exists.stat.exists
+  
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: start portworx
+  service: 
+    name: portworx
+    state: started 
+    enabled: yes
+
+- name: ln -vfs /opt/pwx/bin/pxctl /usr/bin/pxctl
+  file:
+    src: /opt/pwx/bin/pxctl
+    dest: /usr/bin/pxctl
+    owner: root
+    group: root
+    mode: 0755
+    state: link

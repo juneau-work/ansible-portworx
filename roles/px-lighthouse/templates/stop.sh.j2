@@ -1,0 +1,11 @@
+#!/bin/bash
+set -x
+ 
+/usr/bin/docker rm -f pxlighthouse_https
+ 
+/usr/bin/docker rm -f pxlighthouse_lighthouse
+ 
+/usr/bin/docker rm -f pxlighthouse_influxdb
+ 
+/usr/bin/docker network rm pxlighthouse_backend
+exit 0

@@ -1,0 +1,16 @@
+[Unit]
+Description=Portworx Lighthouse Web GUI
+Documentation=https://docs.portworx.com/enterprise/on-premise-lighthouse.html
+Requires=docker.service
+After=docker.service
+  
+[Service]
+Type=simple
+EnvironmentFile=-/opt/px-lighthouse/config
+ExecStartPre=/opt/px-lighthouse/stop.sh
+ExecStart=/opt/px-lighthouse/start.sh
+ExecStop=/opt/px-lighthouse/stop.sh
+Restart=on-failure
+   
+[Install]
+WantedBy=multi-user.target

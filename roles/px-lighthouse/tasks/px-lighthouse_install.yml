@@ -1,0 +1,31 @@
+---
+- name: create /opt/px-lighthouse directory
+  file:
+    path: /opt/px-lighthouse
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: px-lighthouse.service
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: px-lighthouse.service.j2, dest: /etc/systemd/system/px-lighthouse.service, mode: '0644' }
+    - { src: config.j2, dest: /opt/px-lighthouse/config, mode: '0644' }
+    - { src: stop.sh.j2, dest: /opt/px-lighthouse/stop.sh, mode: '0755' }
+    - { src: start.sh.j2, dest: /opt/px-lighthouse/start.sh, mode: '0755' }
+
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: start px-lighthouse
+  service: 
+    name: px-lighthouse
+    state: started 
+    enabled: yes

@@ -1,10 +1,17 @@
 [all:vars]
 ansible_user={{ vault_ansible_user }}
+ansible_password={{ vault_ansible_password }}
+ansible_connection=paramiko
 
-[seed]
-
-[manager]
+[etcd]
+192.168.130.11
 192.168.130.12
 192.168.130.13
 
-[worker]
+[px-enterprise]
+192.168.130.11
+192.168.130.12
+192.168.130.13
+
+[px-lighthouse]
+192.168.130.11

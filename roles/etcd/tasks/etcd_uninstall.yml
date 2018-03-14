@@ -25,7 +25,6 @@
     - /usr/bin/etcdctl
     - /tmp/etcd-{{ etcd_version }}-linux-amd64
     - /tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz
-    - /tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz.MD5
     - /opt/etcd
     - /lib/systemd/system/etcd.service
     - /etc/etcd.conf

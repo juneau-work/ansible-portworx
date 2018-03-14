@@ -1,9 +1,8 @@
 ---
 - name: install chrony
   yum: 
-    name: chrony 
+    name: chrony
     state: present
-    update_cache: yes
 
 - name: configure chrony 
   template: 

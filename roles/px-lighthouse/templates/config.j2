@@ -1,0 +1,8 @@
+PX_REGISTRY=daocloud.io/daocloud/
+LIGHTHOUSE_VERSION=latest
+LIGHTHOUSE_HTTP_PORT=9080
+LIGHTHOUSE_HTTPS_PORT=9433
+PWX_PX_PRECREATE_ADMIN=false
+INFLUXDB_VERSION=latest
+VOLUME_DRIVER=local
+PX_ETCD={% for item in groups['etcd'] %}{{ hostname_prefix }}-{{ hostvars[item]['inventory_hostname'].split('.')[2:] | join('-') }}=http://{{ hostvars[item]['inventory_hostname'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}

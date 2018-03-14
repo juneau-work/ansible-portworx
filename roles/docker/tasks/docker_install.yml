@@ -1,24 +1,38 @@
-- name: yum.conf obsoletes=0
+- include_tasks: offline_yum_repo.yml
+- include_tasks: ntp.yml
+- name: yum.conf skip_broken=1, obsoletes=0
   ini_file:
     path: /etc/yum.conf
     section: main
-    option: obsoletes
-    value: 0
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    no_extra_spaces: True
+  with_items:
+    - { option: skip_broken, value: 1 }
+    - { option: obsoletes, value: 0 }
 
 - name: install docker-ce-{{ docker_version }}
   yum: 
     name: "{{ item }}"
     state: present
+    disablerepo: "*"
+    enablerepo: dce_offline,centos7_base_repo
     update_cache: yes
   with_items:
     - docker-ce-{{ docker_version }}
+    - kernel-devel
+    - kernel-headers
 
-- name: yum.conf obsoletes=1
+- name: yum.conf skip_broken=0, obsoletes=1
   ini_file:
     path: /etc/yum.conf
     section: main
-    option: obsoletes
-    value: 1
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    no_extra_spaces: True
+  with_items:
+    - { option: skip_broken, value: 0 }
+    - { option: obsoletes, value: 1 }
 
 - name: tune docker.service
   ini_file:
@@ -29,6 +43,14 @@
   with_items:
     - { option: Restart, value: on-failure }
     - { option: RestartSec, value: 3 }
+
+- name: sync daemon.json
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
 
 - name: systemd daemon-reload
   systemd:

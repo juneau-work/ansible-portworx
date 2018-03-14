@@ -1,2 +1,3 @@
 ---
-# tasks file for px-enterprise
+- import_tasks: px-enterprise_{{ install_or_uninstall }}.yml
+  tags: px-enterprise

@@ -1,0 +1,13 @@
+- name: dce offline repo
+  yum_repository:
+    name: dce_offline
+    description: dce offline repo
+    baseurl: "{{ dce_offline_repo }}"
+    gpgcheck: no
+
+- name: centos7 base repo
+  yum_repository:
+    name: centos7_base_repo
+    description: centos7 base repo
+    baseurl: "{{ centos7_base_repo }}"
+    gpgcheck: no

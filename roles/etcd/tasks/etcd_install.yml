@@ -11,31 +11,16 @@
     groups: etcd
     append: yes
 
-- name: download etcd MD5
-  get_url:
-    url: "{{ etcd_bin_tar_url }}/etcd-{{ etcd_version }}-linux-amd64.tar.gz.MD5"
-    dest: /tmp
-
-- name: check md5
-  shell: "[[ \"$(md5sum /tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz|awk '{print $1}')\" == \"$(cat /tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz.MD5)\" ]]"
-  register: md5_result
-  ignore_errors: true
-
-- debug:
-    msg: "{{ md5_result }}"
-
 - name: download etcd binary
   get_url:
-    url: "{{ etcd_bin_tar_url }}/etcd-{{ etcd_version }}-linux-amd64.tar.gz"
+    url: "{{ etcd_bin_tar_url }}"
     dest: /tmp
-  when: md5_result.rc != 0
 
 - name: unarchive etcd tar
   unarchive:
     remote_src: yes
     src: /tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz
     dest: /tmp
-  when: md5_result.rc != 0
 
 - name: move etcd,etcdctl to PATH
   copy:

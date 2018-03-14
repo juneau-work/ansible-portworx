@@ -1,0 +1,35 @@
+#!/bin/bash
+set -x
+/usr/bin/docker network create -d bridge pxlighthouse_backend
+/usr/bin/docker run -d --restart=unless-stopped \
+    --name pxlighthouse_influxdb \
+    --net=pxlighthouse_backend \
+    --network-alias=influxdb \
+    -e ADMIN_USER="admin" \
+    -e INFLUXDB_INIT_PWD="passw0rd" \
+    -v pxlighthouse_influxdb_data:/var/lib/influxdb \
+    --volume-driver ${VOLUME_DRIVER} \
+    ${PX_REGISTRY}influxdb:${INFLUXDB_VERSION}
+ 
+if [ $? -ne 0 ]; then
+   exit 1
+fi
+ 
+/usr/bin/docker run -d --restart=unless-stopped \
+    --name pxlighthouse_https \
+    --net=pxlighthouse_backend \
+    -e PROXY_URL="http://lighthouse:80/" \
+    -p ${LIGHTHOUSE_HTTPS_PORT}:443 \
+    ${PX_REGISTRY}dce-plugin-proxy:latest
+ 
+/usr/bin/sleep 2
+ 
+/usr/bin/docker run --restart=unless-stopped \
+    --name pxlighthouse_lighthouse \
+    --net=pxlighthouse_backend \
+    --net-alias=lighthouse \
+    -e PWX_PX_PRECREATE_ADMIN=${PWX_PX_PRECREATE_ADMIN} \
+    -p ${LIGHTHOUSE_HTTP_PORT}:80 \
+    ${PX_REGISTRY}px-lighthouse:${LIGHTHOUSE_VERSION} \
+    -d http://admin:passw0rd@influxdb:8086 \
+    -k ${PX_ETCD}

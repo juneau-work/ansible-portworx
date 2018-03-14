@@ -1,12 +1,41 @@
+#########################################################
 timezone: Asia/Shanghai
-ntp_server: 192.168.130.254
+ntp_server: ntp1.aliyun.com
 domain_name: example.com
+hostname_prefix: dce
+#########################################################
 
-## portworx磁盘 ##
-portworx_disks: /dev/sdb,/dev/sdc,/dev/sdd
 
-## docker版本 ##
+#########################################################
+## etcd相关 ##
+#etcd_bin_tar_url: https://github.com/coreos/etcd/releases/download/v3.2.17/etcd-v3.2.17-linux-amd64.tar.gz
+etcd_version: v3.2.17
+etcd_bin_tar_url: http://192.168.130.1/ftp/linux_soft/k8s/etcd-{{ etcd_version }}-linux-amd64.tar.gz
+#########################################################
+
+
+
+#########################################################
+## docker相关 ##
 docker_version: 17.03.2.ce
+#########################################################
 
-## 离线安装相关 ##
-docker_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
+
+
+#########################################################
+## portworx相关 ##
+portworx_disks: /dev/sdb,/dev/sdc
+portworx_cluster_id: 66c6a195-99c4-46a8-b831-39079269ec2c
+portworx_manage_interface: ens33
+portworx_data_interface: ens33
+#########################################################
+
+
+
+#########################################################
+# dce离线yum源
+dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
+centos7_base_repo: http://192.168.130.1/ftp/centos7
+# px离线镜像
+offline_hub_prefix: 192.168.130.1:5000/daocloud
+#########################################################
