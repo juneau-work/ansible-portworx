@@ -35,7 +35,7 @@ bash vault.sh
 
 -------------------------------------------------------------------------------
 #### 安装px ####
-> ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt run.yml --extra-vars install_or_uninstall=install
+> ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt one_step_install.yml --extra-vars install_or_uninstall=install
 
 
 
@@ -43,4 +43,4 @@ bash vault.sh
 
 -------------------------------------------------------------------------------
 #### 卸载px ####
-> ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt run.yml --extra-vars install_or_uninstall=uninstall
+> ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt one_step_uninstall.yml --extra-vars install_or_uninstall=uninstall

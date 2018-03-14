@@ -6,6 +6,7 @@
     state: stopped
   with_items:
     - docker
+    - chronyd
   ignore_errors: true
 
 - name: uninstall docker-ce-{{ docker_version }}
@@ -14,17 +15,24 @@
     state: absent
   with_items:
     - docker-ce-{{ docker_version }}
+    - chrony
 
-- name: filter mounted container dirs
-  shell: df
+- name: remove chrony user
+  user:
+    name: chrony
+    state: absent
+
+- name: filter mount point
+  shell: df | awk 'NR>1{print $NF}' | sort -r
   register: df_result
 
-- set_fact: DF_RESULT={{ df_result.stdout | regex_findall('(/var/lib/kubelet/pods/.+)') }}
-- name: unmount left pods 
+- set_fact: DF_RESULT={{ df_result.stdout.split() }}
+- name: unmount
   mount:
     path: "{{ item }}"
     state: unmounted
   with_items: "{{ DF_RESULT }}"
+  ignore_errors: true
 
 - name: clear docker left directories
   file:
@@ -34,3 +42,7 @@
     - /etc/docker
     - /var/lib/dockershim
     - /var/lib/docker
+    - /var/lib/docker
+    - /etc/chrony.conf
+    - /etc/yum.repos.d/dce_offline.repo
+    - /etc/yum.repos.d/centos7_base_repo.repo
