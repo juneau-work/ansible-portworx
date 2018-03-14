@@ -3,4 +3,4 @@
 - import_playbook: etcd.yml
 - import_playbook: docker.yml
 - import_playbook: px-enterprise.yml
-- import_playbook: px-lighthouse.yml
+  #- import_playbook: px-lighthouse.yml

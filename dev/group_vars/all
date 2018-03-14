@@ -8,7 +8,6 @@ hostname_prefix: dce
 
 #########################################################
 ## etcd相关 ##
-#etcd_bin_tar_url: https://github.com/coreos/etcd/releases/download/v3.2.17/etcd-v3.2.17-linux-amd64.tar.gz
 etcd_version: v3.2.17
 etcd_bin_tar_url: http://192.168.130.1/ftp/linux_soft/k8s/etcd-{{ etcd_version }}-linux-amd64.tar.gz
 #########################################################

@@ -44,6 +44,14 @@
     - { option: Restart, value: on-failure }
     - { option: RestartSec, value: 3 }
 
+- name: create docker configuration directory(/etc/docker)
+  file:
+    path: /etc/docker
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
 - name: sync daemon.json
   template:
     src: daemon.json.j2

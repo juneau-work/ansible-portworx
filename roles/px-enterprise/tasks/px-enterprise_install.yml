@@ -24,10 +24,12 @@
   shell: > 
          /opt/pwx/bin/px-runc install
          -c {{ portworx_cluster_id }}
-         -k {% for item in groups['etcd'] %}{{ hostname_prefix }}-{{ hostvars[item]['inventory_hostname'].split('.')[2:] | join('-') }}=http://{{ hostvars[item]['inventory_hostname'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}
+         -k {% for item in groups['etcd'] %}etcd://{{ hostvars[item]['inventory_hostname'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}
          -m {{ portworx_manage_interface }}
          -d {{ portworx_data_interface }}
-         -s {{ portworx_disks }}
+         {% for disk in portworx_disks.split(',') %}
+         -s {{ disk }}
+         {% endfor %}
          -secret_type kvdb
          -x kubernetes
   when: not portworx_service_exists.stat.exists
