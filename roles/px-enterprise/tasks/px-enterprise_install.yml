@@ -32,6 +32,7 @@
          {% endfor %}
          -secret_type kvdb
          -x kubernetes
+         -v /var/lib/kubelet:/var/lib/kubelet:shared
   when: not portworx_service_exists.stat.exists
   
 - name: systemd daemon-reload
