@@ -1,8 +1,8 @@
 ---
-- name: is px-enterprise version {{ portworx_enterprise_version }} ?
-  shell: /opt/pwx/bin/pxctl --version|grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+'
-  register: version_res
-  ignore_errors: true
+- name: /opt/pwx/bin/pxctl exists ?
+  stat: 
+    path: /opt/pwx/bin/pxctl
+  register: res_exists
 
 - name: sync px-runc
   shell: > 
@@ -13,7 +13,7 @@
          -v /opt/pwx:/opt/pwx
          -v /etc/pwx:/etc/pwx
          {{ offline_hub_prefix }}/px-enterprise:{{ portworx_enterprise_version }}
-  when: version_res.stdout != portworx_enterprise_version or (not version_res.stdout)
+  when: not (res_exists.stat.isreg is defined and res_exists.stat.isreg)
   
 - name: generate portworx.service
   shell: > 

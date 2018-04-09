@@ -27,6 +27,7 @@
     - /etc/systemd/system/portworx.service
     - /etc/systemd/system/portworx-reboot.service
     - /opt/pwx
+  ignore_errors: true
 
 - name: systemd daemon-reload
   systemd:

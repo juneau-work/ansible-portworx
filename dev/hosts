@@ -8,7 +8,7 @@ ansible_connection=paramiko
 
 [px-enterprise]
 192.168.130.11
-192.168.130.12
+#192.168.130.12
 #192.168.130.13
 
 [px-lighthouse]
