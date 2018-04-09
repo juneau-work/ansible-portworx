@@ -23,7 +23,7 @@ docker_version: 17.03.2.ce
 
 #########################################################
 ## portworx相关 ##
-portworx_enterprise_version: 1.2.22
+portworx_enterprise_version: 1.2.20
 portworx_disks: /dev/sdb,/dev/sdc
 portworx_cluster_id: 66c6a195-99c4-46a8-b831-39079269ec2c
 portworx_manage_interface: ens33

@@ -23,8 +23,9 @@
     state: absent
 
 - name: filter mount point
-  shell: df | awk 'NR>1{print $NF}' | sort -r
+  shell: df | awk 'NR>1{print $NF}' | sort -r |grep -E -v '^/sys/fs/cgroup$|^/run$|^/dev$|^/$'
   register: df_result
+  ignore_errors: true
 
 - set_fact: DF_RESULT={{ df_result.stdout.split() }}
 - name: unmount
