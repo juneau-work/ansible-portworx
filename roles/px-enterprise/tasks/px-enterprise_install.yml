@@ -1,8 +1,8 @@
 ---
-- name: /opt/pwx/bin/px-runc exists ?
-  stat: 
-    path: /opt/pwx/bin/px-runc
-  register: runc_exists
+- name: is px-enterprise version {{ portworx_enterprise_version }} ?
+  shell: /opt/pwx/bin/pxctl --version|grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+'
+  register: version_res
+  ignore_errors: true
 
 - name: sync px-runc
   shell: > 
@@ -12,14 +12,9 @@
          --privileged=true
          -v /opt/pwx:/opt/pwx
          -v /etc/pwx:/etc/pwx
-         {{ offline_hub_prefix }}/px-enterprise:latest
-  when: not runc_exists.stat.exists
+         {{ offline_hub_prefix }}/px-enterprise:{{ portworx_enterprise_version }}
+  when: version_res.stdout != portworx_enterprise_version or (not version_res.stdout)
   
-- name: /etc/systemd/system/portworx.service exists ?
-  stat: 
-    path: /etc/systemd/system/portworx.service
-  register: portworx_service_exists
-
 - name: generate portworx.service
   shell: > 
          /opt/pwx/bin/px-runc install
@@ -33,7 +28,6 @@
          -secret_type kvdb
          -x kubernetes
          -v /var/lib/kubelet:/var/lib/kubelet:shared
-  when: not portworx_service_exists.stat.exists
   
 - name: systemd daemon-reload
   systemd:

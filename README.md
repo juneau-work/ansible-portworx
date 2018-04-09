@@ -44,3 +44,11 @@ bash vault.sh
 -------------------------------------------------------------------------------
 #### 卸载px ####
 > ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt one_step_uninstall.yml --extra-vars install_or_uninstall=uninstall
+
+
+
+
+
+-------------------------------------------------------------------------------
+#### 升级px ####
+> ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt upgrade.yml
