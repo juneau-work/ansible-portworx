@@ -1,4 +1,15 @@
 ---
+- name: install kernel-devel,kernel-headers
+  yum: 
+    name: "{{ item }}"
+    state: present
+    disablerepo: "*"
+    enablerepo: centos7_base_repo
+    update_cache: yes
+  with_items:
+    - kernel-devel
+    - kernel-headers
+
 - name: /opt/pwx/bin/pxctl exists ?
   stat: 
     path: /opt/pwx/bin/pxctl
@@ -19,7 +30,7 @@
   shell: > 
          /opt/pwx/bin/px-runc install
          -c {{ portworx_cluster_id }}
-         -k {% for item in groups['etcd'] %}etcd://{{ hostvars[item]['inventory_hostname'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}
+         -k {% for item in groups['etcd'] %}etcd://{{ hostvars[item]['inventory_hostname'] }}:2379{% if not loop.last %},{% endif %}{% endfor %}
          -m {{ portworx_manage_interface }}
          -d {{ portworx_data_interface }}
          {% for disk in portworx_disks.split(',') %}

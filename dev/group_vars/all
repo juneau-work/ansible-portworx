@@ -8,8 +8,8 @@ hostname_prefix: portworx
 
 #########################################################
 ## etcd相关 ##
-# https://github.com/coreos/etcd/releases/download/v3.3.7/etcd-v3.3.7-linux-amd64.tar.gz
-etcd_version: v3.3.7
+# https://github.com/coreos/etcd/releases/download/v3.3.5/etcd-v3.3.5-linux-amd64.tar.gz
+etcd_version: v3.3.5
 etcd_bin_tar_url: http://192.168.130.1/ftp/linux_soft/k8s/etcd-{{ etcd_version }}-linux-amd64.tar.gz
 #########################################################
 
@@ -34,6 +34,9 @@ portworx_data_interface: ens33
 
 
 #########################################################
+# centos7 base源, 用来安装px依赖kernel-devel,kernel-headers
+#centos7_base_repo: http://mirrors.163.com/centos/7/os/x86_64/
+centos7_base_repo: http://192.168.130.1/ftp/centos7
 # dce离线yum源
 dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
 # px离线镜像

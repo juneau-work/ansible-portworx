@@ -38,6 +38,8 @@ portworx_cluster_id: 66c6a195-99c4-46a8-b831-39079269ec2c # 通过uuidgen命令�
 portworx_manage_interface: ens33 # 管理流量网卡
 portworx_data_interface: ens33 # 数据流量网卡
 
+
+centos7_base_repo: http://192.168.130.1/ftp/centos7 # centos7 base源, 用来安装px依赖kernel-devel,kernel-headers
 dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708 # dce离线yum源,提供docker,ntp等软件包
 hub_offline_prefix: 192.168.130.1:5000/daocloud # px离线镜像仓库，可以用dce内建镜像仓库，也可以自行搭建，甚至可以直接将镜像push到dce离线源中来作为px离线镜像仓库。dce-plugin-proxy,influxdb,px-lighthouse都使用latest版本
 ```

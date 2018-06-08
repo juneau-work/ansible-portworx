@@ -2,3 +2,5 @@
 - include_tasks: timezone.yml
 - include_tasks: selinux.yml
 - include_tasks: firewalld.yml
+- include_tasks: ntp.yml
+  tags: ntp

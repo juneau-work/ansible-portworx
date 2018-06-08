@@ -1,6 +1,4 @@
 - include_tasks: offline_yum_repo.yml
-- include_tasks: ntp.yml
-  tags: ntp
 - name: yum.conf skip_broken=1, obsoletes=0
   ini_file:
     path: /etc/yum.conf
@@ -17,12 +15,10 @@
     name: "{{ item }}"
     state: present
     disablerepo: "*"
-    enablerepo: dce_offline,centos7_base_repo
+    enablerepo: dce_offline
     update_cache: yes
   with_items:
     - docker-ce-{{ docker_version }}
-    - kernel-devel
-    - kernel-headers
 
 - name: yum.conf skip_broken=0, obsoletes=1
   ini_file:
