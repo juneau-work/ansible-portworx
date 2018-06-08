@@ -12,7 +12,7 @@
          --privileged=true
          -v /opt/pwx:/opt/pwx
          -v /etc/pwx:/etc/pwx
-         {{ offline_hub_prefix }}/px-enterprise:{{ portworx_enterprise_version }}
+         {{ hub_offline_prefix }}/px-enterprise:{{ portworx_enterprise_version }}
   when: not (res_exists.stat.isreg is defined and res_exists.stat.isreg)
   
 - name: generate portworx.service

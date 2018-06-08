@@ -11,7 +11,7 @@
          --privileged=true
          -v /opt/pwx:/opt/pwx
          -v /etc/pwx:/etc/pwx
-         {{ offline_hub_prefix }}/px-enterprise:{{ portworx_enterprise_version }}
+         {{ hub_offline_prefix }}/px-enterprise:{{ portworx_enterprise_version }}
          --upgrade
   when: version_res.stdout != portworx_enterprise_version
   notify: restart portworx

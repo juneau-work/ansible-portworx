@@ -8,7 +8,8 @@ hostname_prefix: portworx
 
 #########################################################
 ## etcd相关 ##
-etcd_version: v3.2.17
+# https://github.com/coreos/etcd/releases/download/v3.3.7/etcd-v3.3.7-linux-amd64.tar.gz
+etcd_version: v3.3.7
 etcd_bin_tar_url: http://192.168.130.1/ftp/linux_soft/k8s/etcd-{{ etcd_version }}-linux-amd64.tar.gz
 #########################################################
 
@@ -35,7 +36,7 @@ portworx_data_interface: ens33
 #########################################################
 # dce离线yum源
 dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
-centos7_base_repo: http://192.168.130.1/ftp/centos7
 # px离线镜像
-offline_hub_prefix: 192.168.130.1:5000/daocloud
+# hub_offline_prefix: daocloud.io/portworx
+hub_offline_prefix: 192.168.130.1:5000/daocloud
 #########################################################
