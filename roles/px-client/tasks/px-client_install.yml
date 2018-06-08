@@ -1,0 +1,36 @@
+---
+- name: install kernel-devel,kernel-headers
+  yum: 
+    name: "{{ item }}"
+    state: present
+    disablerepo: "*"
+    enablerepo: centos7_base_repo
+    update_cache: yes
+  with_items:
+    - kernel-devel
+    - kernel-headers
+
+- name: /opt/pwx/bin/pxctl exists ?
+  stat: 
+    path: /opt/pwx/bin/pxctl
+  register: res_exists
+
+- name: sync px-runc
+  shell: > 
+         docker run 
+         --entrypoint /runc-entry-point.sh
+         --rm 
+         --privileged=true
+         -v /opt/pwx:/opt/pwx
+         -v /etc/pwx:/etc/pwx
+         {{ hub_offline_prefix }}/px-enterprise:{{ portworx_enterprise_version }}
+  when: not (res_exists.stat.isreg is defined and res_exists.stat.isreg)
+  
+- name: ln -vfs /opt/pwx/bin/pxctl /usr/bin/pxctl
+  file:
+    src: /opt/pwx/bin/pxctl
+    dest: /usr/bin/pxctl
+    owner: root
+    group: root
+    mode: 0755
+    state: link

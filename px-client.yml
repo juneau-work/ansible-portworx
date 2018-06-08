@@ -1,0 +1,9 @@
+---
+- hosts: 
+    - px-client
+  roles:
+    - px-client
+  vars_files: 
+    - dev/group_vars/all
+    - dev/group_vars/vault
+  tags: px-client

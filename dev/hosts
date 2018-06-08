@@ -15,3 +15,5 @@ ansible_connection=paramiko
 
 [px-lighthouse]
 192.168.130.11
+
+[px-client]

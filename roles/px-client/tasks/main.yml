@@ -1,0 +1,3 @@
+---
+- import_tasks: px-client_{{ install_or_uninstall }}.yml
+  tags: px-client

@@ -1,0 +1,9 @@
+---
+- name: clear portworx
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /opt/pwx
+    - /etc/pwx
+  ignore_errors: true

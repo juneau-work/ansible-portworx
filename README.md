@@ -15,6 +15,7 @@ pip install ansible
 > etcd是etcd集群节点组
 > px-enterprise是px-enterprise集群节点组
 > px-lighthouse是px web ui节点,该节点只要安装好docker即可
+> px-client是最终使用px集群的客户端，如果px集群和dce集群所在主机相同，则无需重复安装px-client;当px集群完全独立于dce集群时，则dce集群节点全部要装px-client,也就是需要把dce集群所有节点都添加到px-client章节
 ``` ini
 [etcd]
 192.168.130.11
@@ -28,6 +29,8 @@ pip install ansible
 
 [px-lighthouse]
 192.168.130.11
+
+[px-client]
 ```
 4. 定义变量
 **dev/group_vars/all**
