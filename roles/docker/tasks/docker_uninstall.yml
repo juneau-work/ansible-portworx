@@ -36,5 +36,3 @@
     - /etc/docker
     - /var/lib/dockershim
     - /var/lib/docker
-    - /etc/yum.repos.d/dce_offline.repo
-    - /etc/yum.repos.d/centos7_base_repo.repo

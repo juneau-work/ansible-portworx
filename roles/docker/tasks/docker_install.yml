@@ -1,4 +1,3 @@
-- include_tasks: offline_yum_repo.yml
 - name: yum.conf skip_broken=1, obsoletes=0
   ini_file:
     path: /etc/yum.conf
