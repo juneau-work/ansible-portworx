@@ -69,6 +69,8 @@ bash vault.sh
 -------------------------------------------------------------------------------
 ## 安装px ##
 > ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt one_step_install.yml --extra-vars install_or_uninstall=install
+> 注: 如果已经安装好了dce，则需要跳过hostname,hosts,docker  
+> ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt one_step_install.yml --extra-vars install_or_uninstall=install --skip-tags hostname,hosts,docker
 
 
 
